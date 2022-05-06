@@ -1,6 +1,15 @@
 # dbsnipper
 
-**ETL tools for dbSNP database**
+### ETL tools for dbSNP database
 
-**ETL is extract, transform , and load**
+**E: Extract**
+**T: Transform**
+**L: Load**
 
+***Usage***
+
+`git clone https://github.com/Mikew33/dbsnipper.git`
+
+For more options, see help message by
+
+`python dbsnipper --help`
