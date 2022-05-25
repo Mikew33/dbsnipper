@@ -12,9 +12,6 @@ class TestVcfParser(TestCase):
 
     def test_init(self):
         parser = VcfParser(vcf=f'{self.indir}/tiny.vcf')
-
-        print(parser.header)
-
         expected = f'''\
 ##fileformat=VCFv4.3
 ##fileDate=20090805
