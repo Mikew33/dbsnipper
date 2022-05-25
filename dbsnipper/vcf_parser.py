@@ -10,5 +10,8 @@ class VcfParser:
         self.fh = open(vcf, 'r')
 
         self.header = ''
+        temp = []
         for line in self.fh:
-            print(line)
+            if line.startswith("#"):
+                temp.append(line)
+                self.header = ''.join(temp)
