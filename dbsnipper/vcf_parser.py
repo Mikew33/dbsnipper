@@ -11,11 +11,11 @@ class VcfParser:
         self.set_header()
 
     def set_header(self):
-
         num_header_lines = 0
         for line in self.fh:
             if line.startswith('#'):
                 num_header_lines += 1
+
         self.fh.seek(0)
 
         temp = []
@@ -26,3 +26,6 @@ class VcfParser:
             if i == num_header_lines:
                 break
         self.header = ''.join(temp)
+
+    def next(self) -> str:
+        pass

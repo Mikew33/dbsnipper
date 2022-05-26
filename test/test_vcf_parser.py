@@ -19,3 +19,9 @@ class TestVcfParser(TestCase):
 #CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tNA00001\tNA00002\tNA00003
 '''
         self.assertEqual(first=expected, second=parser.header)
+
+    def test_next(self):
+        parser = VcfParser(vcf=f'{self.indir}/tiny.vcf')
+        line = parser.next()
+        expected = f'1\t101\trs6054257\tG\tA\t29\tPASS\tNS=3;DP=14;AF=0.5;DB;H2'
+        self.assertEqual(expected, line)
