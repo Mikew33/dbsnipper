@@ -9,11 +9,14 @@ class VcfParser:
     def __init__(self, vcf: str):
         self.fh = open(vcf, 'r')
         self.set_header()
-        print(self.fh.readline())
 
     def set_header(self):
-        num_header_lines = 4
-        # for loop
+
+        num_header_lines = 0
+        for line in self.fh:
+            if line.startswith('#'):
+                num_header_lines += 1
+        self.fh.seek(0)
 
         temp = []
         i = 0
