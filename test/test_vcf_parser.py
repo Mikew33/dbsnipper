@@ -22,6 +22,5 @@ class TestVcfParser(TestCase):
 
     def test_next(self):
         parser = VcfParser(vcf=f'{self.indir}/tiny.vcf')
-        line = parser.next()
         expected = f'1\t101\trs6054257\tG\tA\t29\tPASS\tNS=3;DP=14;AF=0.5;DB;H2'
-        self.assertEqual(expected, line)
+        self.assertEqual(expected, parser.context)
