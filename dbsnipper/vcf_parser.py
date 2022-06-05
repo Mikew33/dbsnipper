@@ -29,6 +29,15 @@ class VcfParser:
 
     def next(self) -> str:
         line = self.fh.readline()
-        line.split('\t')
-        ret = ''
+        temp_lst = line.split('\t')
+
+        count = 0
+        assemble_lst = []
+        for i in temp_lst:
+            count += 1
+            assemble_lst.append(i)
+            if count == 8:
+                break
+
+        ret = '\t'.join(assemble_lst)
         return ret
