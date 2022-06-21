@@ -36,3 +36,45 @@ class TestVcfParser(TestCase):
         actual = parser.next()
         expected = '3\t103\trs6040355\tA\tG,T\t67\tPASS\tNS=2;DP=10;AF=0.333,0.667;AA=T;DB'
         self.assertEqual(expected, actual)
+
+    def test_next_new(self):
+        parser = VcfParser(vcf=f'{self.indir}/tiny.vcf')
+
+        actual = parser.next()  # first line
+        expected = {
+            'CHROM': '1',
+            'POS': '101',
+            'ID': 'rs6054257',
+            'REF': 'G',
+            'ALT': 'A',
+            'QUAL': '29',
+            'FILTER': 'PASS',
+            'INFO': 'NS=3;DP=14;AF=0.5;DB;H2',
+        }
+        self.assertEqual(expected, actual)
+
+        parser.next()  # second line
+        expected = {
+            'CHROM': '',
+            'POS': '',
+            'ID': '',
+            'REF': '',
+            'ALT': '',
+            'QUAL': '',
+            'FILTER': '',
+            'INFO': '',
+        }
+        self.assertEqual(expected, actual)
+
+        actual = parser.next()  # third line
+        expected = {
+            'CHROM': '',
+            'POS': '',
+            'ID': '',
+            'REF': '',
+            'ALT': '',
+            'QUAL': '',
+            'FILTER': '',
+            'INFO': '',
+        }
+        self.assertEqual(expected, actual)

@@ -1,10 +1,21 @@
-from typing import IO
+from typing import IO, Dict
 
 
 class VcfParser:
 
     header: str
     fh: IO
+
+    VCF_KEYS = [
+        'CHROM',
+        'POS',
+        'ID',
+        '',
+        '',
+        '',
+        '',
+        '',
+    ]
 
     def __init__(self, vcf: str):
         self.fh = open(vcf, 'r')
@@ -27,7 +38,7 @@ class VcfParser:
                 break
         self.header = ''.join(temp)
 
-    def next(self) -> str:
+    def next(self) -> Dict[str, str]:
         line = self.fh.readline()
         temp_lst = line.split('\t')
 
