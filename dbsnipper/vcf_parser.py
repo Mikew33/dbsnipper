@@ -5,16 +5,15 @@ class VcfParser:
 
     header: str
     fh: IO
-
     VCF_KEYS = [
         'CHROM',
         'POS',
         'ID',
-        '',
-        '',
-        '',
-        '',
-        '',
+        'REF',
+        'ALT',
+        'QUAL',
+        'FILTER',
+        'INFO'
     ]
 
     def __init__(self, vcf: str):
@@ -50,5 +49,8 @@ class VcfParser:
             if count == 8:
                 break
 
-        ret = '\t'.join(assemble_lst)
-        return ret
+        data_dict = {}
+        for index in range(len(self.VCF_KEYS)):
+            data_dict[self.VCF_KEYS[index]] = assemble_lst[index]
+
+        return data_dict

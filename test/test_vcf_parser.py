@@ -53,28 +53,28 @@ class TestVcfParser(TestCase):
         }
         self.assertEqual(expected, actual)
 
-        parser.next()  # second line
+        actual = parser.next()  # second line
         expected = {
-            'CHROM': '',
-            'POS': '',
-            'ID': '',
-            'REF': '',
-            'ALT': '',
-            'QUAL': '',
-            'FILTER': '',
-            'INFO': '',
+            'CHROM': '2',
+            'POS': '102',
+            'ID': '.',
+            'REF': 'T',
+            'ALT': 'A',
+            'QUAL': '3',
+            'FILTER': 'q10',
+            'INFO': 'NS=3;DP=11;AF=0.017',
         }
         self.assertEqual(expected, actual)
 
         actual = parser.next()  # third line
         expected = {
-            'CHROM': '',
-            'POS': '',
-            'ID': '',
-            'REF': '',
-            'ALT': '',
-            'QUAL': '',
-            'FILTER': '',
-            'INFO': '',
+            'CHROM': '3',
+            'POS': '103',
+            'ID': 'rs6040355',
+            'REF': 'A',
+            'ALT': 'G,T',
+            'QUAL': '67',
+            'FILTER': 'PASS',
+            'INFO': 'NS=2;DP=10;AF=0.333,0.667;AA=T;DB',
         }
         self.assertEqual(expected, actual)
