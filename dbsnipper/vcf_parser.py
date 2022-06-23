@@ -1,5 +1,5 @@
 from typing import IO, Dict
-
+import gzip
 
 class VcfParser:
 
@@ -17,7 +17,10 @@ class VcfParser:
     ]
 
     def __init__(self, vcf: str):
-        self.fh = open(vcf, 'r')
+        if vcf.endswith('.gz'):
+            self.fh = gzip.open(vcf, 'rt')  # rt: read text
+        else:
+            self.fh = open(vcf, 'r')
         self.set_header()
 
     def set_header(self):
@@ -50,7 +53,16 @@ class VcfParser:
                 break
 
         data_dict = {}
-        for index in range(len(self.VCF_KEYS)):
-            data_dict[self.VCF_KEYS[index]] = assemble_lst[index]
+        for i in range(len(self.VCF_KEYS)):
+            data_dict[self.VCF_KEYS[i]] = assemble_lst[i]
+
+        for element in data_dict['INFO'].split(';'):
+            if '=' in element:
+                key, val = element.split('=')
+            else:
+                key, val = element, None
+            data_dict[key] = val
+
+        data_dict.pop('INFO')
 
         return data_dict
