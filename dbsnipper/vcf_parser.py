@@ -1,5 +1,7 @@
-from typing import IO, Dict
+from typing import IO
 import gzip
+import json
+
 
 class VcfParser:
 
@@ -40,29 +42,47 @@ class VcfParser:
                 break
         self.header = ''.join(temp)
 
-    def next(self) -> Dict[str, str]:
-        line = self.fh.readline()
-        temp_lst = line.split('\t')
+    def next(self):
+        collected_data = []
+        output_in_json = f'{__file__[:-3]}.json'
 
-        count = 0
-        assemble_lst = []
-        for i in temp_lst:
-            count += 1
-            assemble_lst.append(i)
-            if count == 8:
+        while True:
+            line = self.fh.readline()
+            temp_lst = line.split('\t')
+
+            count = 0
+            assemble_lst = []
+            for i in temp_lst:
+                count += 1
+                assemble_lst.append(i)
+                if count == 8:
+                    break
+
+            data_dict = {}
+            try:
+                for i, element in enumerate(self.VCF_KEYS):
+                    data_dict[element] = assemble_lst[i]
+            except IndexError:
                 break
 
-        data_dict = {}
-        for i in range(len(self.VCF_KEYS)):
-            data_dict[self.VCF_KEYS[i]] = assemble_lst[i]
+            info_data = data_dict['INFO'].split(';')
 
-        for element in data_dict['INFO'].split(';'):
-            if '=' in element:
-                key, val = element.split('=')
-            else:
-                key, val = element, None
-            data_dict[key] = val
+            info_collected = []
+            for element in info_data:
+                info_pieces = element.split('=')
+                info_collected.append(info_pieces)
 
-        data_dict.pop('INFO')
+            info_dict = {}
+            for item in info_collected:
+                try:
+                    info_dict[item[0]] = item[1]
+                except IndexError:
+                    info_dict[item[0]] = None
 
-        return data_dict
+            data_dict.pop('INFO')
+            data_dict.update(info_dict)
+
+            collected_data.append(data_dict)
+
+        with open(output_in_json, 'w') as f:
+            json.dump(collected_data, f, indent=2)
