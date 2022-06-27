@@ -1,6 +1,6 @@
 # dbsnipper
 
-## Tools for extract data from dbSNP database and transform, load, write into JSON
+## Tools for extract data from dbSNP database and transform, load, write into JSON/CSV/SQLite
 
 To clone these file
 
@@ -12,10 +12,4 @@ To clone these file
 `pip install psycopg2-binary` or `conda install psycopg2` 
 
 for connecting to PostgreSQL
-
-
-### For more options, see help message by
-
-`python dbsnipper --help`
-
 
