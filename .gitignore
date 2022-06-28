@@ -12,3 +12,5 @@ __pycache__/
 .pytest_cache/
 test/*outdir*/
 test/*workdir*/
+
+22_0421_picking_by_random_module.vcf.gz

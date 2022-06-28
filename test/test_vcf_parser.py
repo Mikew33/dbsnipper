@@ -1,8 +1,6 @@
 from dbsnipper.vcf_parser import VcfParser
 from .setup import TestCase
 
-import pandas as pd
-
 
 class TestVcfParser(TestCase):
 
@@ -73,3 +71,59 @@ class TestVcfParser(TestCase):
             'DB': None
         }
         self.assertEqual(expected, actual)
+
+    def test_reach_end_of_file(self):
+        parser = VcfParser(vcf=f'{self.indir}/tiny.vcf.gz')
+        while True:
+            ret = parser.next()
+            if ret is None:
+                break
+
+    def test_context_iterator(self):
+        expected = [
+            {
+                'CHROM': '1',
+                'POS': '101',
+                'ID': 'rs6054257',
+                'REF': 'G',
+                'ALT': 'A',
+                'QUAL': '29',
+                'FILTER': 'PASS',
+                'NS': '3',
+                'DP': '14',
+                'AF': '0.5',
+                'DB': None,
+                'H2': None
+            },
+            {
+                'CHROM': '2',
+                'POS': '102',
+                'ID': '.',
+                'REF': 'T',
+                'ALT': 'A',
+                'QUAL': '3',
+                'FILTER': 'q10',
+                'NS': '3',
+                'DP': '11',
+                'AF': '0.017'
+            },
+            {
+                'CHROM': '3',
+                'POS': '103',
+                'ID': 'rs6040355',
+                'REF': 'A',
+                'ALT': 'G,T',
+                'QUAL': '67',
+                'FILTER': 'PASS',
+                'NS': '2',
+                'DP': '10',
+                'AF': '0.333,0.667',
+                'AA': 'T',
+                'DB': None
+            }
+        ]
+
+        with VcfParser(vcf=f'{self.indir}/tiny.vcf.gz') as parser:
+            actual = [variant for variant in parser]
+
+        self.assertListEqual(expected, actual)

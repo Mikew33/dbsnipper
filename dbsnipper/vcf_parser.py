@@ -1,5 +1,6 @@
-from typing import IO, Dict
 import gzip
+from typing import IO, Dict, Optional
+
 
 class VcfParser:
 
@@ -23,6 +24,27 @@ class VcfParser:
             self.fh = open(vcf, 'r')
         self.set_header()
 
+    # for context manager
+    def __enter__(self):
+        return self
+
+    # for context manager
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.fh.close()
+        return
+
+    # for iterator
+    def __iter__(self):
+        return self
+
+    # for iterator
+    def __next__(self):
+        r = self.next()
+        if r is not None:
+            return r
+        else:
+            raise StopIteration
+
     def set_header(self):
         num_header_lines = 0
         for line in self.fh:
@@ -40,8 +62,13 @@ class VcfParser:
                 break
         self.header = ''.join(temp)
 
-    def next(self) -> Dict[str, str]:
+    def next(self) -> Optional[Dict[str, str]]:
         line = self.fh.readline()
+
+        end_of_file = line == ''
+        if end_of_file:
+            return None
+
         temp_lst = line.split('\t')
 
         count = 0
@@ -58,7 +85,9 @@ class VcfParser:
 
         for element in data_dict['INFO'].split(';'):
             if '=' in element:
-                key, val = element.split('=')
+                pos = element.index('=')
+                key = element[0:pos]
+                val = element[pos+1:]
             else:
                 key, val = element, None
             data_dict[key] = val
