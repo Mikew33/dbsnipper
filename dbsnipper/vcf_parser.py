@@ -1,4 +1,5 @@
 import gzip
+import pandas as pd
 from typing import IO, Dict, Optional
 
 
@@ -95,3 +96,12 @@ class VcfParser:
         data_dict.pop('INFO')
 
         return data_dict
+
+    def write_dataframe(self):
+        ret_dict = VcfParser.next(self)
+        index = 0
+        index += 1
+        i = [str(index)]
+        ret = pd.DataFrame(ret_dict, index=i)
+
+        return ret

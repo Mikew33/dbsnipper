@@ -127,3 +127,8 @@ class TestVcfParser(TestCase):
             actual = [variant for variant in parser]
 
         self.assertListEqual(expected, actual)
+
+    def test_write_dataframe(self):
+        parser = VcfParser(vcf=f'{self.indir}/tiny.vcf.gz')
+        actual = parser.write_dataframe()
+        print(actual)
