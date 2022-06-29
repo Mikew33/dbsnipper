@@ -1,4 +1,4 @@
-from dbsnipper.vcf_parser import VcfParser
+from dbsnipper.vcf_parser import VcfParser, extract_vcf_to_dataframe
 from .setup import TestCase
 
 
@@ -128,7 +128,18 @@ class TestVcfParser(TestCase):
 
         self.assertListEqual(expected, actual)
 
-    def test_write_dataframe(self):
-        parser = VcfParser(vcf=f'{self.indir}/tiny.vcf.gz')
-        actual = parser.write_dataframe()
-        print(actual)
+
+class TestExtractVcfToDataFrame(TestCase):
+
+    def setUp(self):
+        self.set_up(py_path=__file__)
+
+    def tearDown(self):
+        self.tear_down()
+
+    def test_extract_vcf_to_dataframe(self):
+        actual = extract_vcf_to_dataframe(
+            vcf=f'{self.indir}/tiny.vcf.gz',
+            columns=['CHROM', 'ID', 'REF', 'ALT', 'POS']
+        )
+

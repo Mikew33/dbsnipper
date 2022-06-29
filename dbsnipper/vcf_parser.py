@@ -1,6 +1,6 @@
 import gzip
 import pandas as pd
-from typing import IO, Dict, Optional
+from typing import IO, Dict, Optional, List
 
 
 class VcfParser:
@@ -31,7 +31,7 @@ class VcfParser:
 
     # for context manager
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.fh.close()
+        self.close()
         return
 
     # for iterator
@@ -97,11 +97,20 @@ class VcfParser:
 
         return data_dict
 
-    def write_dataframe(self):
-        ret_dict = VcfParser.next(self)
-        index = 0
-        index += 1
-        i = [str(index)]
-        ret = pd.DataFrame(ret_dict, index=i)
+    def close(self):
+        self.fh.close()
 
-        return ret
+
+def extract_vcf_to_dataframe(vcf: str, columns: List[str]) -> pd.DataFrame:
+
+    ret = pd.DataFrame(columns=columns)
+
+    with VcfParser(vcf=vcf) as parser:
+
+        variant = parser.next()
+
+        ret = ret.append(
+            other=variant,
+            ignore_index=True)
+
+    return ret
