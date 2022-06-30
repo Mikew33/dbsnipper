@@ -103,14 +103,11 @@ class VcfParser:
 
 def extract_vcf_to_dataframe(vcf: str, columns: List[str]) -> pd.DataFrame:
 
-    ret = pd.DataFrame(columns=columns)
+    collected_lst = []
 
     with VcfParser(vcf=vcf) as parser:
+        for variant in parser:
+            variant = {k: v for k, v in variant.items() if k in columns}
+            collected_lst.append(variant)
 
-        variant = parser.next()
-
-        ret = ret.append(
-            other=variant,
-            ignore_index=True)
-
-    return ret
+    return pd.DataFrame(data=collected_lst, columns=columns)

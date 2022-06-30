@@ -142,4 +142,4 @@ class TestExtractVcfToDataFrame(TestCase):
             vcf=f'{self.indir}/tiny.vcf.gz',
             columns=['CHROM', 'ID', 'REF', 'ALT', 'POS']
         )
-
+        print(actual)
